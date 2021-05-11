@@ -83,33 +83,21 @@ router.get('/:id', function(req, res, next) {
 
 
 
-// DESTROY candidates endpoint for one candidate.
-router.delete("/:id", (req, res, next) => {
-    res.send(`DELETE Request Called`);    
-})
+
+
+
+
 
 
 // PATH/PUT candidates listening 
-router.put("/:id", (req, res) => {
-    res.send(`Got a PUT request from / userId ${req.params.id} `)
-})
-
-
-
-router.get('/:id/edit', function(req, res, next) {
+router.patch("/:id", (req, res) => {
+    const candidates = candidatesData;
     idx = candidatesData.findIndex(c => c.id === parseInt(req.params.id));
-    let candidate = candidatesData[idx]
-    if(candidate){
-        res.json(candidate)
-    
-    } else {
-        res.send("<h1>Not found the candidate </h1>")
-    }
-});
-
-// PATH/PUT candidates listening 
-router.put("/:id/edit", (req, res) => {
-    res.send(`Got a PUT request from / userId ${req.params.id} `)
+    let candidate = candidates[idx];
+    candidate = {...candidate, ...req.body};
+    candidates[idx] = candidate
+    save(candidates);
+    res.send(candidate);
 })
 
 
